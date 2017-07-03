@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 
-public class MapChip {
+public class MapChip : MonoBehaviour{
 	private GameObject mapChipObj;
-	private bool isCharacter;
+	public bool isCharacter;
 	private int spriteNum;
 	private int x, y;
     private Vector2 pos;
+
+    /*
 	public MapChip(int x, int y, GameObject mapchip){
 		spriteNum = 0;
 		isCharacter = false;
@@ -13,7 +15,7 @@ public class MapChip {
         pos.y = y;
 		mapChipObj = mapchip;
 	}
-
+    */
 	public int getspriteNum(){
 		return spriteNum;
 	}
