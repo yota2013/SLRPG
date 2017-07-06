@@ -6,6 +6,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     [SerializeField]
     MoveCharacter moveCharacter;
 
+
     public Vector2 mapSize;
     [SerializeField]
     Vector3 spawnPos;
@@ -17,16 +18,20 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     public List<GameObject> charaList;
     public GameObject map;
     public GameObject[,] mapChips;
+    public int[,] moveMap;
 
     public bool isMove = false;
 
     // Use this for initialization
     void Start()
     {
-        mapChips = CreateMap(mapSize,mapChipPref);
+        CreateMap(mapSize,mapChipPref);
         foreach (GameObject obj in charaPrefList)
         {
-            CreateCharacter(mapChips[Random.Range(0,(int)mapSize.x), Random.Range(0, (int)mapSize.y)], obj);
+            int x = Random.Range(0, (int)mapSize.x);
+            int y = Random.Range(0, (int)mapSize.y);
+            CreateCharacter(mapChips[x, y], obj);
+            moveMap[x, y] = -99;
         }
     }
 
@@ -49,7 +54,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         int width = (int)mapSize.x;
         int height = (int)mapSize.y;
 
-        GameObject[,] mapChips = new GameObject[width, height];
+        mapChips = new GameObject[width, height];
+        moveMap = new int[width, height];
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
@@ -57,9 +63,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                 GameObject temp = Instantiate(mapChip, new Vector3(i, j, 0), Quaternion.identity);
                 temp.transform.parent = map.transform;
                 mapChips[i, j] = temp;
+                moveMap[i, j] = temp.GetComponent<NomalMapChip>().getMoveNum();
             }
         }
-       return mapChips;
+        
+        Debug.Log(moveMap[0,0]);
+        return mapChips;
     }
 
     private void CreateCharacter(GameObject mapChip, GameObject character)

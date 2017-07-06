@@ -194,7 +194,6 @@ GameObject:
   - component: {fileID: 2139475834}
   - component: {fileID: 2139475833}
   - component: {fileID: 2139475832}
-  - component: {fileID: 2139475831}
   - component: {fileID: 2139475837}
   - component: {fileID: 2139475838}
   m_Layer: 0
@@ -204,25 +203,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2139475831
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2139475830}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5ab079ce8dd4bf48844d09f14363f43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mapSize: {x: 10, y: 10}
-  spawnPos: {x: 0, y: 0, z: 0}
-  mapChipPref: {fileID: 1195152787029724, guid: 3c0b0dde08f9b884eaa3f1e374725a66,
-    type: 2}
-  charaPref: {fileID: 1670124719923868, guid: e32e6d4ab09f8564aaf9346514612bb9, type: 2}
-  tempChara: {fileID: 0}
-  charaList: []
-  Map: {fileID: 571787400}
 --- !u!81 &2139475832
 AudioListener:
   m_ObjectHideFlags: 0

@@ -10,7 +10,7 @@ public class Battle : BattleState{
 		if (obj != null) {
 			BattleInfo.camera.transform.position = new Vector3(0,0,-10) + obj.transform.position;
             //Debug.Log(obj.transform.position);
-            BattleInfo.mapChips [(int)obj.transform.position.x, (int)obj.transform.position.y].printState ();
+            //BattleInfo.mapChips [(int)obj.transform.position.x, (int)obj.transform.position.y].printState ();
 		}
 
 	}

@@ -108,7 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 0
-  move: 0
+  move: 2
   AGL: 0
   DEF: 0
 --- !u!212 &212416173350996948
