@@ -13,7 +13,7 @@ public class MoveCharacter : MonoBehaviour {
     void Start()
     {
         getOnClickObj = new GetOnClickObj();
-        mapSize = GameManager.Instance.mapSize;
+        mapSize = GameManager.Instance.mapSize;//インスタンスの変数
     }
     
     IEnumerator Move(GameObject character)

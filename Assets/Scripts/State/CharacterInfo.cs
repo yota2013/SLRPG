@@ -16,4 +16,5 @@ public class CharacterInfo : MonoBehaviour {
         this.DEF = def;
     }
 
+	 
 }
