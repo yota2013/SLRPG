@@ -1,0 +1,11 @@
+{
+    "_id":1345010201,
+    "_name":"先輩",
+    "_hp":"114",
+    "_avator_path":"",
+    "_move":514,
+    "_speed":810,
+    "_cost":893,
+    "_religion":"Dark",
+    "_attribute":"Close"
+}

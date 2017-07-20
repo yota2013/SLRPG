@@ -3,18 +3,61 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterInfo : MonoBehaviour {
-    public int HP;
-    public int move;
-    public int AGL;
-    public int DEF;
+    
+    const string config_dir = "Config/Character";
+	const long config_id = 1345010201;
 
-    public CharacterInfo(int hp, int move, int agl, int def)
-    {
-        this.HP = hp;
-        this.move = move;
-        this.AGL = agl;
-        this.DEF = def;
+    Character chara;
+
+	public CharacterInfo(long chara_id){
+		InstantiateCharacter (chara_id);
     }
 
-	 
+	private void InstantiateCharacter(long id){
+		//      string json = JsonToString.loadFromFile(config_dir, id.ToString());
+		string json = JsonToString.loadFromFile("Config/Character", "1345010201");
+		chara = JsonUtility.FromJson<Character> (json);
+	}
+
+	public string name{
+		get{ return chara.name;}
+	}
+
+	public long id{
+		get{ return chara.id;}
+	}
+
+	public short hp{
+		get{ return chara.hp;}
+		set{ chara.hp = value;}
+	}
+
+	public short move{
+		get{ return chara.move;}
+		set{ chara.move = value;}
+	}
+
+	public short speed{
+		get{ return chara.speed;}
+		set{ chara.speed = value;}
+	}
+
+	public short cost{
+		get{ return chara.cost;}
+		set{ chara.cost = value;}
+	}
+
+	public string religion{
+		get{ return chara.getReligionStr ();}
+	}
+
+	public string attribute{
+		get{ return chara.getAttributeStr ();}
+	}
+
+	void Awake(){
+		if (chara == null) {
+			InstantiateCharacter (config_id);
+		}
+	}
 }
