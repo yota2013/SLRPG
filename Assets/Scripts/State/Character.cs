@@ -15,7 +15,8 @@ public class Character : ISerializationCallbackReceiver{
 	[SerializeField] private short _cost;
 
 	private enum Religion : byte{
-		Fire = 1,
+		NULL,
+		Fire,
 		Water,
 		Wind,
 		Light,
@@ -25,7 +26,8 @@ public class Character : ISerializationCallbackReceiver{
 	[SerializeField] private string _religion;
 
 	private enum Attribute : byte{
-		Close = 1,
+		NULL,
+		Close,
 		Long,
 		Area,
 		Healer,
@@ -38,7 +40,15 @@ public class Character : ISerializationCallbackReceiver{
 	// constructor
 	// set default value and these can be overwritten
 	public Character(){
-
+		this.id = -1;
+		this.name = "";
+		this._avatar_path = "";
+		this.hp = -1;
+		this.move = -1;
+		this.speed = -1;
+		this.cost = -1;
+		this.religion = "NULL";
+		this.attribute = "NULL";
 	}
 
 	// callback
@@ -48,7 +58,7 @@ public class Character : ISerializationCallbackReceiver{
 		this.setReligion (_religion);
 		this.setAttribute (_attribute);
 
-//		db ();
+//		db (); // debug
 	}
 
 	// callback
@@ -92,6 +102,9 @@ public class Character : ISerializationCallbackReceiver{
 		return religion.ToString();
 	}
 	private void setReligion(string value){
+		if(value == "null" || value == ""){
+			value = "Wind";
+		}
 		religion = (Religion)Enum.Parse (typeof(Religion), value);
 	}
 
@@ -99,6 +112,9 @@ public class Character : ISerializationCallbackReceiver{
 		return attribute.ToString ();
 	}
 	private void setAttribute(string value){
+		if(value == "null" || value == ""){
+			value = "Close";
+		}
 		attribute = (Attribute)Enum.Parse (typeof(Attribute), value);
 	}
 
@@ -126,5 +142,4 @@ public class Character : ISerializationCallbackReceiver{
 
 	// --- any methods?
 	// ・ダメージ補正処理？
-
 }

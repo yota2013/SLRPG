@@ -7,9 +7,9 @@ using MiniJSON;
 public class JsonToString {
 
 	/// <summary>
-	/// Load JSON .txt file and convert it to dictionary
+	/// Load JSON .txt file and convert it to string
 	/// </summary>
-	/// <returns>JSON dictionary</returns>
+	/// <returns>JSON string</returns>
 	/// <param name="dir">Directory name contains .txt</param>
 	/// <param name="fname">Filename (with ".txt")</param>
 	public static string loadFromFile(string dir, string fname){

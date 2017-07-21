@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class CharacterInfo : MonoBehaviour {
     
+	// default config file
     const string config_dir = "Config/Character";
 	const long config_id = 1345010201;
 
     Character chara;
 
+	// constructor
 	public CharacterInfo(long chara_id){
 		InstantiateCharacter (chara_id);
     }
 
 	private void InstantiateCharacter(long id){
-		//      string json = JsonToString.loadFromFile(config_dir, id.ToString());
+//      string json = JsonToString.loadFromFile(config_dir, id.ToString());
+//		TODO: specify character ID on instantiate
 		string json = JsonToString.loadFromFile("Config/Character", "1345010201");
 		chara = JsonUtility.FromJson<Character> (json);
 	}
