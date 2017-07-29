@@ -47,8 +47,8 @@ public class Character : ISerializationCallbackReceiver{
 		this.move = -1;
 		this.speed = -1;
 		this.cost = -1;
-		this.religion = "NULL";
-		this.attribute = "NULL";
+		this.religion = Religion.NULL;
+		this.attribute = Attribute.NULL;
 	}
 
 	// callback
