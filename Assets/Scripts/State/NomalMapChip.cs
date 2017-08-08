@@ -2,7 +2,8 @@
 
 public class NomalMapChip : MapChip{
 
-	public int getMoveNum(){
+	public int getMoveNum()
+    {
 		return moveNum;
 	}
 

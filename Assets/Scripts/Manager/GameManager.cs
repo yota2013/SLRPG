@@ -6,7 +6,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
 	//SerializeField private だけど シーンに表示される
     [SerializeField]
     MoveCharacter moveCharacter;
-
+    public EmphasissSprite emphasisSprite;
 
     public Vector2 mapSize;//マップの大きさ
     [SerializeField]
@@ -33,8 +33,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         {
             int x = Random.Range(0, (int)mapSize.x);
             int y = Random.Range(0, (int)mapSize.y);
+
             CreateCharacter(mapChips[x, y], obj);
-            moveMap[x, y] = -99; //他のキャラが移動できないように移動コストを99にしている
+            //moveMap[x, y] = -99; //他のキャラが移動できないように移動コストを99にしている
         }
     }
 
@@ -49,6 +50,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
             i++;
             isMove = true;
         }
+
+
+
     }
 
 	//マップ作成関数
@@ -67,7 +71,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                 GameObject temp = Instantiate(mapChip, new Vector3(i, j, 0), Quaternion.identity);//map生成
                 temp.transform.parent = map.transform;//オブジェクトの場所設定
                 mapChips[i, j] = temp;//マップの配列を作成
-                moveMap[i, j] = temp.GetComponent<NomalMapChip>().getMoveNum();//マップごとに素手に存在している.
+                moveMap[i, j] = temp.GetComponent<NomalMapChip>().getMoveNum();//マップごとに既に存在している.
             }
         }
         

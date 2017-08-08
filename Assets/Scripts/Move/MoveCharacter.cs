@@ -6,7 +6,7 @@ public class MoveCharacter : MonoBehaviour {
 
     private GetOnClickObj getOnClickObj;
     private Coroutine coroutine;
-    private int[,] moveMap;
+    int[,] moveMap;
     private Vector2 mapSize;
 
 
@@ -18,7 +18,6 @@ public class MoveCharacter : MonoBehaviour {
     
     IEnumerator Move(GameObject character)
     {
-        CalculateMove(character);
         while (true)
         {
             if (Input.GetMouseButtonDown(0))
@@ -31,6 +30,7 @@ public class MoveCharacter : MonoBehaviour {
                     {
                         character.transform.position = obj.transform.position;
                         character.transform.parent = obj.transform;
+                        GameManager.Instance.emphasisSprite.DisenableEmphasiss();
                         EndMove();
                         yield break;
                     }
@@ -43,11 +43,31 @@ public class MoveCharacter : MonoBehaviour {
 
     void CalculateMove(GameObject chara)
     {
+        GameObject[,] mapChips = GameManager.Instance.mapChips;
         moveMap = (int[,])GameManager.Instance.moveMap.Clone();
         int x = (int)chara.transform.position.x;
         int y = (int)chara.transform.position.y;
+
         moveMap[x, y] = chara.GetComponent<CharacterInfo>().move;
         Search4(moveMap[x, y], x, y);
+
+        List<GameObject> emphasiss = new List<GameObject>();
+        emphasiss.Clear();
+        for (int i = 0; i < moveMap.GetLength(0); i++)
+        {
+            for (int j = 0; j < moveMap.GetLength(1); j++)
+            {
+                if (moveMap[i, j] >= 0)
+                {
+                    emphasiss.Add(mapChips[i, j]);
+                }
+            }
+        }
+        GameManager.Instance.emphasisSprite.EnableEmphasiss(emphasiss);
+        for (int i = 0; i < mapSize.x; i++)
+        {
+            Debug.Log(moveMap[i, 0] + " " + moveMap[i, 1] + " " + moveMap[i, 2] + " " + moveMap[i, 3] + " " + moveMap[i, 4] + " " + moveMap[i, 5] + " " + moveMap[i, 6]);
+        }
     }
 
     void Search4(int canMove,int x, int y)
@@ -83,7 +103,10 @@ public class MoveCharacter : MonoBehaviour {
 
     public void StartMove(GameObject character)
     {
+
+        CalculateMove(character);
         coroutine = StartCoroutine(Move(character));
+        
     }
 
     void EndMove()
