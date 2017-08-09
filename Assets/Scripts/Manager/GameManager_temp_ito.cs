@@ -6,7 +6,7 @@ using UnityEditor;
 public class GameManager_temp_ito : SingletonMonoBehaviour<GameManager_temp_ito> {
 	//SerializeField private だけど シーンに表示される
 	//[SerializeField]
-	MoveCharacter moveCharacter;
+	TurnManager moveCharacter;
 
 
 	public Vector2 mapSize;//マップの大きさ
@@ -54,7 +54,7 @@ public class GameManager_temp_ito : SingletonMonoBehaviour<GameManager_temp_ito>
 		if (!isMove)
 		{
 			if (i == charaList.Count) i = 0;
-			moveCharacter.StartMove(charaList[i]);
+			moveCharacter.StartTurn(charaList[i]);
 			i++;
 			isMove = true;
 		}
@@ -128,7 +128,7 @@ public class GameManager_temp_ito : SingletonMonoBehaviour<GameManager_temp_ito>
 	private void EndSelection()
 	{
 		if (charaPrefList.Count == 3) {
-			moveCharacter = this.gameObject.AddComponent<MoveCharacter> ();
+			moveCharacter = this.gameObject.AddComponent<TurnManager> ();
 			//キャラ配置
 			foreach (GameObject obj in charaPrefList)
 			{

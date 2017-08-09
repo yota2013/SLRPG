@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : SingletonMonoBehaviour<GameManager> {
 	//SerializeField private だけど シーンに表示される
     [SerializeField]
-    MoveCharacter moveCharacter;
+    TurnManager turnManager;
     public EmphasissSprite emphasisSprite;
 
     public Vector2 mapSize;//マップの大きさ
@@ -22,14 +22,11 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     public GameObject[,] mapChips; //mapのオブジェクトが入ってる
     public int[,] moveMap;
 
-    public bool isMove = false;
-
-    List<GameObject> enemy;
+    public bool isTurn = false;
 
     // Use this for initialization
     void Start()
     {
-		
 		CreateMap(mapSize,mapChipPref);
         //キャラ配置
         bool temp = true;
@@ -41,20 +38,18 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
             CreateCharacter(mapChips[x, y], obj,temp);
             temp = !temp;
         }
-        enemy = new List<GameObject>();
-        enemy.Add(charaList[1]);
     }
 
     // Update is called once per frame
     int i = 0;
     void Update()
     {
-        if (!isMove)
+        if (!isTurn)
         {
             if (i == charaList.Count) i = 0;
-            moveCharacter.StartMove(charaList[i]);
+            turnManager.StartTurn(charaList[i]);
             i++;
-            isMove = true;
+            isTurn = true;
         }
 
 
