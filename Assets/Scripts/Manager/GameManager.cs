@@ -17,11 +17,14 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     List<GameObject> charaPrefList; //キャラリスト
     
     public List<GameObject> charaList;
+
     public GameObject map; //mapオブジェクトこの下にmapchip生成
     public GameObject[,] mapChips; //mapのオブジェクトが入ってる
     public int[,] moveMap;
 
     public bool isMove = false;
+
+    List<GameObject> enemy;
 
     // Use this for initialization
     void Start()
@@ -29,14 +32,17 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
 		
 		CreateMap(mapSize,mapChipPref);
         //キャラ配置
+        bool temp = true;
 		foreach (GameObject obj in charaPrefList)
         {
             int x = Random.Range(0, (int)mapSize.x);
             int y = Random.Range(0, (int)mapSize.y);
 
-            CreateCharacter(mapChips[x, y], obj);
-            //moveMap[x, y] = -99; //他のキャラが移動できないように移動コストを99にしている
+            CreateCharacter(mapChips[x, y], obj,temp);
+            temp = !temp;
         }
+        enemy = new List<GameObject>();
+        enemy.Add(charaList[1]);
     }
 
     // Update is called once per frame
@@ -75,17 +81,29 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
             }
         }
         
-        Debug.Log(moveMap[0,0]);
         return mapChips;
     }
 
-    private void CreateCharacter(GameObject mapChip, GameObject character)
+    private void CreateCharacter(GameObject mapChip, GameObject character,bool isPlayable)
     {
         GameObject temp = Instantiate(character, mapChip.transform.position, Quaternion.identity);
         temp.transform.parent = mapChip.transform;
+        temp.GetComponent<CharacterInfo>().setPlayable(isPlayable);
         charaList.Add(temp);
     }
 
+    public int[,] GetMoveMap(bool charaPlayable)
+    {
+        int[,] temp = (int[,])moveMap.Clone();
+        foreach (GameObject obj in charaList)
+        {
+            if (charaPlayable != obj.GetComponent<CharacterInfo>().getPlayable())
+            {
+                temp[(int)obj.transform.parent.position.x, (int)obj.transform.parent.position.y] = -99;
+            }
+        }
+        return temp;
+    }
 
 
 }

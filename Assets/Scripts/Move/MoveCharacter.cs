@@ -44,7 +44,7 @@ public class MoveCharacter : MonoBehaviour {
     void CalculateMove(GameObject chara)
     {
         GameObject[,] mapChips = GameManager.Instance.mapChips;
-        moveMap = (int[,])GameManager.Instance.moveMap.Clone();
+        moveMap = GameManager.Instance.GetMoveMap(chara.GetComponent<CharacterInfo>().getPlayable());
         int x = (int)chara.transform.position.x;
         int y = (int)chara.transform.position.y;
 
@@ -64,10 +64,6 @@ public class MoveCharacter : MonoBehaviour {
             }
         }
         GameManager.Instance.emphasisSprite.EnableEmphasiss(emphasiss);
-        for (int i = 0; i < mapSize.x; i++)
-        {
-            Debug.Log(moveMap[i, 0] + " " + moveMap[i, 1] + " " + moveMap[i, 2] + " " + moveMap[i, 3] + " " + moveMap[i, 4] + " " + moveMap[i, 5] + " " + moveMap[i, 6]);
-        }
     }
 
     void Search4(int canMove,int x, int y)
