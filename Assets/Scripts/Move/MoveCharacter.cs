@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MoveCharacter : MonoBehaviour {
-    private GetOnClickObj getOnClickObj;
     int[,] moveMap;
     private Vector2 mapSize;
     bool isMove = true;

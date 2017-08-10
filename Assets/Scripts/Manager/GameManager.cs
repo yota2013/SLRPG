@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class GameManager : SingletonMonoBehaviour<GameManager> {
 	//SerializeField private だけど シーンに表示される
-    [SerializeField]
-    TurnManager turnManager;
     public EmphasissSprite emphasisSprite;
+    public MoveCharacter moveCharacter; 
+
 
     public Vector2 mapSize;//マップの大きさ
     [SerializeField]
@@ -17,7 +17,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     List<GameObject> charaPrefList; //キャラリスト
     
     public List<GameObject> charaList;
-
+    public GameObject nowTurnCharacter;
     public GameObject map; //mapオブジェクトこの下にmapchip生成
     public GameObject[,] mapChips; //mapのオブジェクトが入ってる
     public int[,] moveMap;
@@ -47,7 +47,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         if (!isTurn)
         {
             if (i == charaList.Count) i = 0;
-            turnManager.StartTurn(charaList[i]);
+            //turnManager.StartTurn(charaList[i]);
+            StartTurn(charaList[i]);
             i++;
             isTurn = true;
         }
@@ -100,5 +101,28 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         return temp;
     }
 
+    public void ClickEvent(GameObject obj)
+    {
+        if (obj.CompareTag("Map"))
+        {
+            moveCharacter.Move(obj.transform, nowTurnCharacter);
+        }
+        else if (obj.CompareTag("Character"))
+        {
 
+        }
+    }
+    public void StartTurn(GameObject character)
+    {
+        nowTurnCharacter = character;
+        moveCharacter.InitializeValue(nowTurnCharacter);
+        //coroutine = StartCoroutine(Turn());
+    }
+
+    public void EndTurn()
+    {
+        //StopCoroutine(Turn());
+        GameManager.Instance.emphasisSprite.DisenableEmphasiss();
+        GameManager.Instance.isTurn = false;
+    }
 }
