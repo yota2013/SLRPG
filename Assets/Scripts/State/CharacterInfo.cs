@@ -8,6 +8,9 @@ public class CharacterInfo : MonoBehaviour {
     const string config_dir = "Config/Character";
 	const long config_id = 1345010201;
 
+    [SerializeField]
+    bool playable;
+
     Character chara;
 
 	// constructor
@@ -57,6 +60,16 @@ public class CharacterInfo : MonoBehaviour {
 	public string attribute{
 		get{ return chara.getAttributeStr ();}
 	}
+
+    public void setPlayable(bool isPlayable)
+    {
+        playable = isPlayable;
+    }
+
+    public bool getPlayable()
+    {
+        return playable;
+    }
 
 	void Awake(){
 		if (chara == null) {

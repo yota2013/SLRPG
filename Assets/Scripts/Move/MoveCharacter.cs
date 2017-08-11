@@ -3,52 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MoveCharacter : MonoBehaviour {
-
-    private GetOnClickObj getOnClickObj;
-    private Coroutine coroutine;
     int[,] moveMap;
     private Vector2 mapSize;
-
+    bool isMove = true;
+    GameObject beforeParent;
+    GameObject nowTurnCharacter;
 
     void Start()
     {
-        getOnClickObj = new GetOnClickObj();
         mapSize = GameManager.Instance.mapSize;//インスタンスの変数
-    }
-    
-    IEnumerator Move(GameObject character)
-    {
-        while (true)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                GameObject obj = getOnClickObj.getGameObj();
-                Debug.Log(obj.gameObject.name);
-                if (obj.CompareTag("Map"))
-                {
-                    if (moveMap[(int)obj.transform.position.x, (int)obj.transform.position.y] >= 0)
-                    {
-                        character.transform.position = obj.transform.position;
-                        character.transform.parent = obj.transform;
-                        GameManager.Instance.emphasisSprite.DisenableEmphasiss();
-                        EndMove();
-                        yield break;
-                    }
-                }
 
+    }
+
+    public void Move(Transform objTrans, GameObject character)
+    {
+        if (isMove)
+        { 
+            if (moveMap[(int)objTrans.position.x, (int)objTrans.position.y] >= 0)
+            {
+                beforeParent = character.transform.parent.gameObject;
+                character.transform.position = objTrans.position;
+                character.transform.parent = objTrans;
+                GameManager.Instance.emphasisSprite.DisenableEmphasiss();
+                isMove = false;
             }
-            yield return null;
         }
     }
 
-    void CalculateMove(GameObject chara)
+    public void CalculateMoveMap(GameObject character)
     {
         GameObject[,] mapChips = GameManager.Instance.mapChips;
-        moveMap = (int[,])GameManager.Instance.moveMap.Clone();
-        int x = (int)chara.transform.position.x;
-        int y = (int)chara.transform.position.y;
+        moveMap = GameManager.Instance.GetMoveMap(character.GetComponent<CharacterInfo>().getPlayable());
+        int x = (int)character.transform.position.x;
+        int y = (int)character.transform.position.y;
 
-        moveMap[x, y] = chara.GetComponent<CharacterInfo>().move;
+        moveMap[x, y] = character.GetComponent<CharacterInfo>().move;
         Search4(moveMap[x, y], x, y);
 
         List<GameObject> emphasiss = new List<GameObject>();
@@ -64,13 +53,10 @@ public class MoveCharacter : MonoBehaviour {
             }
         }
         GameManager.Instance.emphasisSprite.EnableEmphasiss(emphasiss);
-        for (int i = 0; i < mapSize.x; i++)
-        {
-            Debug.Log(moveMap[i, 0] + " " + moveMap[i, 1] + " " + moveMap[i, 2] + " " + moveMap[i, 3] + " " + moveMap[i, 4] + " " + moveMap[i, 5] + " " + moveMap[i, 6]);
-        }
     }
 
-    void Search4(int canMove,int x, int y)
+
+    void Search4(int canMove, int x, int y)
     {
         if (x - 1 >= 0 && moveMap[x - 1, y] < 0)
         {
@@ -84,7 +70,7 @@ public class MoveCharacter : MonoBehaviour {
         {
             Search(canMove, x, y - 1);
         }
-        if (y + 1 < mapSize.y && moveMap[x, y+1] < 0)
+        if (y + 1 < mapSize.y && moveMap[x, y + 1] < 0)
         {
             Search(canMove, x, y + 1);
         }
@@ -95,26 +81,24 @@ public class MoveCharacter : MonoBehaviour {
         if (canMove + moveMap[x, y] >= 0)
         {
             moveMap[x, y] = canMove + moveMap[x, y];
-            Search4(canMove-1, x, y);
+            Search4(canMove - 1, x, y);
         }
     }
 
 
-
-    public void StartMove(GameObject character)
+    public void InitializeValue(GameObject character)
     {
-
-        CalculateMove(character);
-        coroutine = StartCoroutine(Move(character));
-        
+        isMove = true;
+        nowTurnCharacter = character;
+        beforeParent = character.transform.parent.gameObject;
+        CalculateMoveMap(character);
     }
 
-    void EndMove()
+    public void ReturnMove()
     {
-        StopCoroutine(Move(null));
-        GameManager.Instance.isMove = false;    
+        nowTurnCharacter.transform.position = beforeParent.transform.position;
+        nowTurnCharacter.transform.parent = beforeParent.transform;
+        GameManager.Instance.emphasisSprite.DisenableEmphasiss();
+        InitializeValue(nowTurnCharacter);
     }
-
-
-
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 //yota
 
 public class åttack : MonoBehaviour {
-	private GetOnClickObj getOnClickObj;
+	//private GetOnClickObj getOnClickObj;
 
 	// Use this for initialization
 	void Start () {

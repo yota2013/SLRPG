@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class GameManager : SingletonMonoBehaviour<GameManager> {
 	//SerializeField private だけど シーンに表示される
-    [SerializeField]
-    MoveCharacter moveCharacter;
     public EmphasissSprite emphasisSprite;
+    public MoveCharacter moveCharacter; 
+
 
     public Vector2 mapSize;//マップの大きさ
     [SerializeField]
@@ -17,25 +17,26 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     List<GameObject> charaPrefList; //キャラリスト
     
     public List<GameObject> charaList;
+    public GameObject nowTurnCharacter;
     public GameObject map; //mapオブジェクトこの下にmapchip生成
     public GameObject[,] mapChips; //mapのオブジェクトが入ってる
     public int[,] moveMap;
 
-    public bool isMove = false;
+    public bool isTurn = false;
 
     // Use this for initialization
     void Start()
     {
-		
 		CreateMap(mapSize,mapChipPref);
         //キャラ配置
+        bool temp = true;
 		foreach (GameObject obj in charaPrefList)
         {
             int x = Random.Range(0, (int)mapSize.x);
             int y = Random.Range(0, (int)mapSize.y);
 
-            CreateCharacter(mapChips[x, y], obj);
-            //moveMap[x, y] = -99; //他のキャラが移動できないように移動コストを99にしている
+            CreateCharacter(mapChips[x, y], obj,temp);
+            temp = !temp;
         }
     }
 
@@ -43,12 +44,13 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     int i = 0;
     void Update()
     {
-        if (!isMove)
+        if (!isTurn)
         {
             if (i == charaList.Count) i = 0;
-            moveCharacter.StartMove(charaList[i]);
+            //turnManager.StartTurn(charaList[i]);
+            StartTurn(charaList[i]);
             i++;
-            isMove = true;
+            isTurn = true;
         }
 
 
@@ -75,17 +77,52 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
             }
         }
         
-        Debug.Log(moveMap[0,0]);
         return mapChips;
     }
 
-    private void CreateCharacter(GameObject mapChip, GameObject character)
+    private void CreateCharacter(GameObject mapChip, GameObject character,bool isPlayable)
     {
         GameObject temp = Instantiate(character, mapChip.transform.position, Quaternion.identity);
         temp.transform.parent = mapChip.transform;
+        temp.GetComponent<CharacterInfo>().setPlayable(isPlayable);
         charaList.Add(temp);
     }
 
+    public int[,] GetMoveMap(bool charaPlayable)
+    {
+        int[,] temp = (int[,])moveMap.Clone();
+        foreach (GameObject obj in charaList)
+        {
+            if (charaPlayable != obj.GetComponent<CharacterInfo>().getPlayable())
+            {
+                temp[(int)obj.transform.parent.position.x, (int)obj.transform.parent.position.y] = -99;
+            }
+        }
+        return temp;
+    }
 
+    public void ClickEvent(GameObject obj)
+    {
+        if (obj.CompareTag("Map"))
+        {
+            moveCharacter.Move(obj.transform, nowTurnCharacter);
+        }
+        else if (obj.CompareTag("Character"))
+        {
 
+        }
+    }
+    public void StartTurn(GameObject character)
+    {
+        nowTurnCharacter = character;
+        moveCharacter.InitializeValue(nowTurnCharacter);
+        //coroutine = StartCoroutine(Turn());
+    }
+
+    public void EndTurn()
+    {
+        //StopCoroutine(Turn());
+        GameManager.Instance.emphasisSprite.DisenableEmphasiss();
+        GameManager.Instance.isTurn = false;
+    }
 }
