@@ -31,9 +31,14 @@ public class EmphasissSprite : MonoBehaviour {
 
     public void EnableEmphasiss(List<GameObject> obj)
     {
+        if (isTrigger)
+        {
+            DisenableEmphasiss();
+        }
         isTrigger = true;
         emphasissObj = obj;
     }
+
     public void DisenableEmphasiss()
     {
         foreach (GameObject obj in emphasissObj)

@@ -52,9 +52,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
             i++;
             isTurn = true;
         }
-
-
-
     }
 
 	//マップ作成関数
