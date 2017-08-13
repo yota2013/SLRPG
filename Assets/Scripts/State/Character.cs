@@ -67,7 +67,6 @@ public class Character : ISerializationCallbackReceiver{
 	}
 
 	// ----------------------------------------------------
-
 	public string name{
 		get{ return _name;}
 		private set{ _name = value;}
