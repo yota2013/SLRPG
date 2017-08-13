@@ -149,6 +149,8 @@ GameObject:
   - component: {fileID: 2139475833}
   - component: {fileID: 2139475832}
   - component: {fileID: 2139475831}
+  - component: {fileID: 2139475838}
+  - component: {fileID: 2139475837}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -164,17 +166,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 2139475830}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e7e2190d870d8748be1665deb8a2aeb, type: 3}
+  m_Script: {fileID: 11500000, guid: c02be2a2806e18f4aade62101a94fda1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapSize: {x: 5, y: 5}
+  emphasisSprite: {fileID: 2139475838}
+  moveCharacter: {fileID: 2139475837}
+  mapSize: {x: 7, y: 7}
   spawnPos: {x: 0, y: 0, z: 0}
   mapChipPref: {fileID: 1195152787029724, guid: 3c0b0dde08f9b884eaa3f1e374725a66,
     type: 2}
-  charaPrefList: []
+  charaPref: {fileID: 1716085432549234, guid: ce21f600e07357d408382ac62d4a7c9d, type: 2}
   charaList: []
+  nowTurnCharacter: {fileID: 0}
   map: {fileID: 349742889}
-  isMove: 0
+  isTurn: 0
 --- !u!81 &2139475832
 AudioListener:
   m_ObjectHideFlags: 0
@@ -245,3 +250,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2139475837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2139475830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 310004456d9ece843b9e9eba59495461, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2139475838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2139475830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a888a8dec3251cd47a398901e1e5ebdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

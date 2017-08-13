@@ -13,9 +13,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     Vector3 spawnPos;
     [SerializeField]
     GameObject mapChipPref;//マップのプレハブ
-    [SerializeField]
-    List<GameObject> charaPrefList; //キャラリスト
-    
+    //[SerializeField]
+    //List<GameObject> charaPrefList; //キャラリスト
+	[SerializeField]
+	GameObject charaPref;
+	CharacterSelection characterSelection;
+
     public List<GameObject> charaList;
     public GameObject nowTurnCharacter;
     public GameObject map; //mapオブジェクトこの下にmapchip生成
@@ -29,15 +32,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     {
 		CreateMap(mapSize,mapChipPref);
         //キャラ配置
-        bool temp = true;
-		foreach (GameObject obj in charaPrefList)
-        {
-            int x = Random.Range(0, (int)mapSize.x);
-            int y = Random.Range(0, (int)mapSize.y);
-
-            CreateCharacter(mapChips[x, y], obj,temp);
-            temp = !temp;
-        }
+		//敵軍キャラ選択&配置
+		List<long> enemyIndex = new List<long>{1023010301L,1023010301L};
+		CharacterArrengement(enemyIndex,false);
+		//自軍キャラ選択&配置
+		characterSelection = new CharacterSelection ();
+		StartCoroutine (characterSelection.SelectCharacter());
     }
 
     // Update is called once per frame
@@ -77,10 +77,23 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         return mapChips;
     }
 
-    private void CreateCharacter(GameObject mapChip, GameObject character,bool isPlayable)
+	//Playableキャラの配置
+	public void CharacterArrengement(List<long> selectedCharacterIndex,bool isPlayable){
+		foreach (long index in selectedCharacterIndex)
+		{
+			int x = Random.Range(0, (int)mapSize.x);
+			int y = Random.Range(0, (int)mapSize.y);
+			CreateCharacter(mapChips[x, y], index,isPlayable);
+		}
+	}
+
+
+    private void CreateCharacter(GameObject mapChip, long index,bool isPlayable)
     {
-        GameObject temp = Instantiate(character, mapChip.transform.position, Quaternion.identity);
+		//charaPrefはPrefabs/ito/CharaPrefを指定しておいてください
+		GameObject temp = Instantiate(charaPref, mapChip.transform.position, Quaternion.identity);
         temp.transform.parent = mapChip.transform;
+		temp.GetComponent<CharacterInfo> ().Initialize (index);
         temp.GetComponent<CharacterInfo>().setPlayable(isPlayable);
         charaList.Add(temp);
     }
