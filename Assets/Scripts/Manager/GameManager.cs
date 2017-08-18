@@ -25,7 +25,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     public bool isTurn = false;
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
 		CreateMap(mapSize,mapChipPref);
         //キャラ配置
@@ -101,6 +101,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         return temp;
     }
 
+
     public void ClickEvent(GameObject obj)
     {
         if (obj.CompareTag("Map"))
@@ -112,6 +113,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
 
         }
     }
+    
+
     public void StartTurn(GameObject character)
     {
         nowTurnCharacter = character;
