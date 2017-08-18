@@ -17,7 +17,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     //List<GameObject> charaPrefList; //キャラリスト
 	[SerializeField]
 	GameObject charaPref;
-	CharacterSelection characterSelection;
+	public CharacterSelection characterSelection;
+	[SerializeField]
+	GameObject characterSelectionUI;
 
     public List<GameObject> charaList;
     public GameObject nowTurnCharacter;
@@ -36,7 +38,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
 		List<long> enemyIndex = new List<long>{1023010301L,1023010301L};
 		CharacterArrengement(enemyIndex,false);
 		//自軍キャラ選択&配置
-		characterSelection = new CharacterSelection ();
+		GameObject temp = GameObject.Find("UI");
+		GameObject characterSelectionUITemp = Instantiate(characterSelectionUI, temp.transform.position,Quaternion.identity);
+		characterSelectionUITemp.transform.parent = temp.transform;
+		characterSelection = new CharacterSelection (characterSelectionUITemp);
 		StartCoroutine (characterSelection.SelectCharacter());
     }
 
@@ -122,8 +127,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         }
         else if (obj.CompareTag("Character"))
         {
-
-        }
+		}
     }
     public void StartTurn(GameObject character)
     {
