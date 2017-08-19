@@ -107,7 +107,7 @@ public class MoveCharacter : MonoBehaviour
 
 	public void DebugOnclick()
 	{
-		Debug.Log (isMove);
+		//Debug.Log (isMove);
 		if (isMove == false)
 		{
 			isMove = true;
@@ -118,7 +118,7 @@ public class MoveCharacter : MonoBehaviour
 			isMove = false;
 			GameManager.Instance.emphasisSprite.DisenableEmphasiss();
 		}
-		Debug.Log ("after"+isMove);
+		//Debug.Log ("after"+isMove);
 	}
 
 

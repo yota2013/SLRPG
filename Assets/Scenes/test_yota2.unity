@@ -288,23 +288,7 @@ Prefab:
       propertyPath: m_Name
       value: CloseCard
       objectReference: {fileID: 0}
-    - target: {fileID: 61315480123340892, guid: 747f9eba867f645519ba927df8e9f702,
-        type: 2}
-      propertyPath: m_Offset.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 61315480123340892, guid: 747f9eba867f645519ba927df8e9f702,
-        type: 2}
-      propertyPath: m_Size.x
-      value: 0.0001
-      objectReference: {fileID: 0}
-    - target: {fileID: 61315480123340892, guid: 747f9eba867f645519ba927df8e9f702,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 61315480123340892, guid: 747f9eba867f645519ba927df8e9f702, type: 2}
+    m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 747f9eba867f645519ba927df8e9f702, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &651103105

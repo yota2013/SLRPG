@@ -63,7 +63,7 @@ public class CharacterInfo : MonoBehaviour {
 
     public void setPlayable(bool isPlayable)
     {
-        playable = isPlayable;
+        playable = isPlayable; //0が味方，1がAI
     }
 
     public bool getPlayable()

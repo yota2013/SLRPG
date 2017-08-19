@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-
+using Damage=ComputationProc.ComputationDamge;
 
 //GameObject 
 
 public class CloseCard : BattleCard, IPointerEnterHandler,IPointerExitHandler,IPointerDownHandler{
 	//インスタンス変数 : カード種類，近距離のどのパターンか，量，を引数
 	//ペアレントの自分の座標が必要
-	[SerializeField]  GameManager gameManager = null; 
-	[SerializeField] GameObject turnchar = null;
+	[SerializeField]  GameManager _gameManager = null; 
+	[SerializeField] GameObject _turnchar = null;
+	[SerializeField] CharacterInfo _turncharInfo = null;
 	[SerializeField] GameObject[,] mapChips;
-	public void InitialCard(int amount,string cardtype,int range_id)
+
+	public void InitialCard(short amount,string cardtype,int range_id)
 	{
 		this.amount = amount;
 		this.range_id = range_id;
@@ -23,9 +25,9 @@ public class CloseCard : BattleCard, IPointerEnterHandler,IPointerExitHandler,IP
 
 	void Start()
 	{
-		gameManager = GameManager.Instance;//GameManager取得
+		_gameManager = GameManager.Instance;//GameManager取得
 		InitialCard (1,"Close",1);
-		mapChips = gameManager.mapChips;
+		mapChips = _gameManager.mapChips;
 	}
 
 	//接近の処理を作成 引数：キャラの位置
@@ -57,8 +59,7 @@ public class CloseCard : BattleCard, IPointerEnterHandler,IPointerExitHandler,IP
 					rangetemp.Add (new Vector2 (localPostion.x, localPostion.y + j));
 					}
 				}
-				Debug.Log (rangetemp);
-
+				
 				break;
 		}
 		this.range = rangetemp;
@@ -74,7 +75,6 @@ public class CloseCard : BattleCard, IPointerEnterHandler,IPointerExitHandler,IP
 		foreach (Vector2 i in range) 
 		{
 				emphasiss.Add (mapChips[(int)i.x,(int)i.y]);
-		
 		}
 
 		GameManager.Instance.emphasisSprite.EnableEmphasiss(emphasiss);
@@ -91,10 +91,10 @@ public class CloseCard : BattleCard, IPointerEnterHandler,IPointerExitHandler,IP
 	public void OnPointerEnter(PointerEventData eventData) 
 	{
 		//Debug.Log("CardOnMouseEnter");
-		turnchar = gameManager.nowTurnCharacter;
-
+		_turnchar = _gameManager.nowTurnCharacter;
+		_turncharInfo = _turnchar.GetComponent<CharacterInfo> ();
 		//マップ上を光らす
-		StartEmphasiss(RangeCreate (turnchar.transform.position));
+		StartEmphasiss(RangeCreate (_turnchar.transform.position));
 	}
 
 
@@ -113,20 +113,30 @@ public class CloseCard : BattleCard, IPointerEnterHandler,IPointerExitHandler,IP
 
 		foreach (Vector2 i in this.range) 
 		{
-			attack (mapChips[(int)i.x,(int)i.y]);//mapchipsのゲームオブジェクトを渡す．
+			Attack (mapChips[(int)i.x,(int)i.y],this.range_id);//mapchipsのゲームオブジェクトを渡す．
 
 		}
 	}
 
 	//マップチップの座標の子供にタグがキャラ判定の人がいるかを判定し，アタック
-	public void attack(GameObject map)
+	void Attack(GameObject map,int ID)
 	{
-		Debug.Log ("データ："+map.transform);
+		Debug.Log ("Attack");
 
 		//子供に全員にアタックしてるのでコード変えなきゃいけない
 		foreach(Transform child in map.transform)
 		{
-			print(child.name + ":" + child.localPosition);
+			Debug.Log ("ループ");
+			CharacterInfo unitInfo = child.GetComponent<CharacterInfo> ();
+			//攻撃側と攻撃された側が敵，味方なら攻撃しない
+			if(unitInfo.getPlayable() != _turncharInfo.getPlayable())
+			{
+				//Debug.Log ("ループ");
+				print(child.name + ":" + child.localPosition);
+				//Debug.Log (child.GetComponent<CharacterInfo>().hp);
+				unitInfo.hp = Damage.CloseDamage (unitInfo.hp,this.amount,this.range_id);
+				//CloseDamage(short opponentHp,short damgeValue,int ID)
+			}
 		}
 
 
