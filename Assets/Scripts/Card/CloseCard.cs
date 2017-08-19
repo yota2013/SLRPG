@@ -14,7 +14,7 @@ public class CloseCard : BattleCard, IPointerEnterHandler,IPointerExitHandler,IP
 	[SerializeField] GameObject _turnchar = null;
 	[SerializeField] CharacterInfo _turncharInfo = null;
 	[SerializeField] GameObject[,] mapChips;
-
+	[SerializeField] bool isSelectCard  = false;
 	public void InitialCard(short amount,string cardtype,int range_id)
 	{
 		this.amount = amount;
@@ -34,7 +34,7 @@ public class CloseCard : BattleCard, IPointerEnterHandler,IPointerExitHandler,IP
 	public override List<Vector2> RangeCreate(Vector2 localPostion)
 	{
 		//nowTurnCharacter
-		//ローカル座標を保持しておけばよいこれに足せば，それは全体のマップ座標になる
+		//ここに攻撃座標を記述switchで攻撃方法を増やせる
 		range_id = this.range_id;
 		List<Vector2> rangetemp = new List<Vector2>();
 		switch (range_id) 
@@ -59,7 +59,6 @@ public class CloseCard : BattleCard, IPointerEnterHandler,IPointerExitHandler,IP
 					rangetemp.Add (new Vector2 (localPostion.x, localPostion.y + j));
 					}
 				}
-				
 				break;
 		}
 		this.range = rangetemp;
@@ -78,7 +77,18 @@ public class CloseCard : BattleCard, IPointerEnterHandler,IPointerExitHandler,IP
 		}
 
 		GameManager.Instance.emphasisSprite.EnableEmphasiss(emphasiss);
+	}
 
+	void OneEmphasiss(List<GameObject> oneEmphasissObj)
+	{
+		/*
+		List<GameObject> obj = new List<GameObject> ();
+		foreach ( GameObject oneobj in oneEmphasissObj)
+		{
+			obj.Add(oneobj);
+		}
+		*/
+		GameManager.Instance.emphasisSprite.OneColorEmphasiss (oneEmphasissObj);
 	}
 
 	//消す関数
@@ -87,7 +97,10 @@ public class CloseCard : BattleCard, IPointerEnterHandler,IPointerExitHandler,IP
 		GameManager.Instance.emphasisSprite.DisenableEmphasiss();
 	}
 
+
 	/*------------UGUIメソッドここから------------*/
+
+	//カーソル入ったとき
 	public void OnPointerEnter(PointerEventData eventData) 
 	{
 		//Debug.Log("CardOnMouseEnter");
@@ -102,7 +115,10 @@ public class CloseCard : BattleCard, IPointerEnterHandler,IPointerExitHandler,IP
 	public void OnPointerExit(PointerEventData eventData) 
 	{
 		//Debug.Log("CardOnMouseExit");
-		EndEmphasiss ();
+		if(!isSelectCard)
+		{
+			EndEmphasiss ();
+		}
 	}
 
 	// マウスボタンが押された時にコールされる
@@ -114,8 +130,11 @@ public class CloseCard : BattleCard, IPointerEnterHandler,IPointerExitHandler,IP
 		foreach (Vector2 i in this.range) 
 		{
 			Attack (mapChips[(int)i.x,(int)i.y],this.range_id);//mapchipsのゲームオブジェクトを渡す．
-
+			List<GameObject> obj = new List<GameObject> ();
+			obj.Add (mapChips[(int)i.x,(int)i.y]);
+			//OneEmphasiss(obj);
 		}
+		isSelectCard = true;
 	}
 
 	//マップチップの座標の子供にタグがキャラ判定の人がいるかを判定し，アタック
