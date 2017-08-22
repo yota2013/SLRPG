@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EmphasissSprite : MonoBehaviour {
-
+public class EmphasissSprite : MonoBehaviour 
+{
     const float EARLINESS = 0.005f;
     int direction = 1;
     float col = 0.5f;
     List<GameObject> emphasissObj;
     bool isTrigger = false;
+
+	//TODO:色を変えたいマン
+
     void Update()
     {
         if (isTrigger)
@@ -22,6 +25,7 @@ public class EmphasissSprite : MonoBehaviour {
             {
                 direction = 1;
             }
+
             foreach(GameObject obj in emphasissObj)
             {
                 obj.GetComponent<SpriteRenderer>().color = new Color(col, col, col, 1);
@@ -38,6 +42,25 @@ public class EmphasissSprite : MonoBehaviour {
         isTrigger = true;
         emphasissObj = obj;
     }
+<<<<<<< HEAD
+=======
+		
+	//onecolor にする関数
+	public void OneColorEmphasiss(List<GameObject> oneEmphasissObj)
+	{
+		
+		foreach ( GameObject obj in oneEmphasissObj )
+		{
+			//Debug.Log ();
+			if(emphasissObj.Contains(obj))
+			{
+				emphasissObj.Remove (obj);
+				Debug.Log ("ある");
+			}
+			obj.GetComponent<SpriteRenderer>().color = new Color(0.7f, 0.0f, 0.0f, 1);
+		}
+	}
+>>>>>>> origin/yota
 
     public void DisenableEmphasiss()
     {
@@ -47,6 +70,5 @@ public class EmphasissSprite : MonoBehaviour {
         }
         isTrigger = false;
     }
-
-
+		
 }

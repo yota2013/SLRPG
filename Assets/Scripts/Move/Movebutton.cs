@@ -1,8 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
-public class LongCard : BattleCard {
+
+//ボタンを押すと移動ができるフレンズなんだね！
+public class Movebutton : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -13,10 +17,4 @@ public class LongCard : BattleCard {
 	void Update () {
 		
 	}
-
-	public override List<Vector2> RangeCreate(Vector2 localPostion)
-	{
-		return new List<Vector2> ();
-	}
-
 }

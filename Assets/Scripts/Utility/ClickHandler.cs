@@ -10,6 +10,7 @@ public class ClickHandler : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         GameManager.Instance.ClickEvent(this.gameObject);
+
     }
 
     public void AddClickHandler(UnityAction<GameObject> handler)

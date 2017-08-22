@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 public class BattleCard : MonoBehaviour
 {
@@ -20,12 +21,12 @@ public class BattleCard : MonoBehaviour
 
 	Cardtype cardtype;
 	[SerializeField] private string _cardtype;
-	[SerializeField] private int _amount;
+	[SerializeField] private short _amount;
 	[SerializeField] private List<Vector2> _range;//local座標
 	[SerializeField] private int _delaytime;
 	[SerializeField] private int _range_id;
 
-	public int amount
+	public short amount
 	{
 		get{ return _amount;}
 		set{ _amount = value;}

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveCharacter : MonoBehaviour {
+public class MoveCharacter : MonoBehaviour 
+{
     int[,] moveMap;
     private Vector2 mapSize;
-    bool isMove = true;
+	bool isMove = false;
     GameObject beforeParent;
     GameObject nowTurnCharacter;
 
@@ -88,11 +89,13 @@ public class MoveCharacter : MonoBehaviour {
 
     public void InitializeValue(GameObject character)
     {
-        isMove = true;
         nowTurnCharacter = character;
         beforeParent = character.transform.parent.gameObject;
-        CalculateMoveMap(character);
+        
+		//CalculateMoveMap(character);//計算の移動 計算とマスを光らしている．　ボタンにしたい
+		//isMove = true;
     }
+		
 
     public void ReturnMove()
     {
@@ -101,4 +104,22 @@ public class MoveCharacter : MonoBehaviour {
         GameManager.Instance.emphasisSprite.DisenableEmphasiss();
         InitializeValue(nowTurnCharacter);
     }
+
+	public void DebugOnclick()
+	{
+		//Debug.Log (isMove);
+		if (isMove == false)
+		{
+			isMove = true;
+			CalculateMoveMap (nowTurnCharacter);
+		}
+		else if (isMove ==true) 
+		{
+			isMove = false;
+			GameManager.Instance.emphasisSprite.DisenableEmphasiss();
+		}
+		//Debug.Log ("after"+isMove);
+	}
+
+
 }

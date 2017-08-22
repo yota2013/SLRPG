@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LongCard : BattleCard {
+public class DebugLog : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -13,10 +13,4 @@ public class LongCard : BattleCard {
 	void Update () {
 		
 	}
-
-	public override List<Vector2> RangeCreate(Vector2 localPostion)
-	{
-		return new List<Vector2> ();
-	}
-
 }
