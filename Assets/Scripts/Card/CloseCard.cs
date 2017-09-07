@@ -7,15 +7,16 @@ using Damage=ComputationProc.ComputationDamge;
 
 //GameObject 
 
-public class CloseCard : BattleCard, IPointerEnterHandler,IPointerExitHandler,IPointerDownHandler{
-	//インスタンス変数 : カード種類，近距離のどのパターンか，量，を引数
-	//ペアレントの自分の座標が必要
-	[SerializeField]  GameManager _gameManager = null; 
+//public class CloseCard : BattleCard, IPointerEnterHandler,IPointerExitHandler,IPointerDownHandler{
+public class CloseCard : BattleCard { 
+    //インスタンス変数 : カード種類，近距離のどのパターンか，量，を引数
+    //ペアレントの自分の座標が必要
+    [SerializeField]  GameManager _gameManager = null; 
 	[SerializeField] GameObject _turnchar = null;
 	[SerializeField] CharacterInfo _turncharInfo = null;
 	[SerializeField] GameObject[,] mapChips;
 	[SerializeField] bool isSelectCard  = false;
-	public void InitialCard(short amount,string cardtype,int range_id)
+	public void InitializeCard(short amount,string cardtype,int range_id)
 	{
 		this.amount = amount;
 		this.range_id = range_id;
@@ -26,7 +27,7 @@ public class CloseCard : BattleCard, IPointerEnterHandler,IPointerExitHandler,IP
 	void Start()
 	{
 		_gameManager = GameManager.Instance;//GameManager取得
-		InitialCard (1,"Close",1);
+		InitializeCard (1,"Close",1);
 		mapChips = _gameManager.mapChips;
 	}
 
@@ -66,7 +67,7 @@ public class CloseCard : BattleCard, IPointerEnterHandler,IPointerExitHandler,IP
 	}
 
 	//光らす関数
-	void StartEmphasiss(List<Vector2>range)
+	public void StartEmphasiss(List<Vector2>range)
 	{
 		List<GameObject> emphasiss = new List<GameObject>();
 		emphasiss.Clear ();
@@ -98,47 +99,46 @@ public class CloseCard : BattleCard, IPointerEnterHandler,IPointerExitHandler,IP
 	}
 
 
-	/*------------UGUIメソッドここから------------*/
+    /*------------UGUIメソッドここから------------*/
+          //カーソル入ったとき
+        public void OnPointerEnter(PointerEventData eventData) 
+        {
+            //Debug.Log("CardOnMouseEnter");
+            _turnchar = _gameManager.nowTurnCharacter;
+            _turncharInfo = _turnchar.GetComponent<CharacterInfo> ();
+            //マップ上を光らす
+            StartEmphasiss(RangeCreate (_turnchar.transform.position));
+        }
 
-	//カーソル入ったとき
-	public void OnPointerEnter(PointerEventData eventData) 
-	{
-		//Debug.Log("CardOnMouseEnter");
-		_turnchar = _gameManager.nowTurnCharacter;
-		_turncharInfo = _turnchar.GetComponent<CharacterInfo> ();
-		//マップ上を光らす
-		StartEmphasiss(RangeCreate (_turnchar.transform.position));
-	}
 
+        // カーソルが対象オブジェクトから出た時
+        public void OnPointerExit(PointerEventData eventData) 
+        {
+            //Debug.Log("CardOnMouseExit");
+            if(!isSelectCard)
+            {
+                EndEmphasiss ();
+            }
+        }
 
-	// カーソルが対象オブジェクトから出た時
-	public void OnPointerExit(PointerEventData eventData) 
-	{
-		//Debug.Log("CardOnMouseExit");
-		if(!isSelectCard)
-		{
-			EndEmphasiss ();
-		}
-	}
+        // マウスボタンが押された時にコールされる
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            print("MouseDown!");
+            //TODO:どのマウスに攻撃するか　範囲のキャラにダメージを与える，this.rangeのなかでマウスを選ぶ
 
-	// マウスボタンが押された時にコールされる
-	public void OnPointerDown(PointerEventData eventData)
-	{
-		print("MouseDown!");
-		//TODO:どのマウスに攻撃するか　範囲のキャラにダメージを与える，this.rangeのなかでマウスを選ぶ
+            foreach (Vector2 i in this.range) 
+            {
+                Attack (mapChips[(int)i.x,(int)i.y],this.range_id);//mapchipsのゲームオブジェクトを渡す．
+                List<GameObject> obj = new List<GameObject> ();
+                obj.Add (mapChips[(int)i.x,(int)i.y]);
+                //OneEmphasiss(obj);
+            }
+            isSelectCard = true;
+        }
 
-		foreach (Vector2 i in this.range) 
-		{
-			Attack (mapChips[(int)i.x,(int)i.y],this.range_id);//mapchipsのゲームオブジェクトを渡す．
-			List<GameObject> obj = new List<GameObject> ();
-			obj.Add (mapChips[(int)i.x,(int)i.y]);
-			//OneEmphasiss(obj);
-		}
-		isSelectCard = true;
-	}
-
-	//マップチップの座標の子供にタグがキャラ判定の人がいるかを判定し，アタック
-	void Attack(GameObject map,int ID)
+    //マップチップの座標の子供にタグがキャラ判定の人がいるかを判定し，アタック
+    void Attack(GameObject map,int ID)
 	{
 		Debug.Log ("Attack");
 

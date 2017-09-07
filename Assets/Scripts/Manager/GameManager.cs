@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : SingletonMonoBehaviour<GameManager> {
-	//SerializeField private だけど シーンに表示される
+
     public EmphasissSprite emphasisSprite;
-    public MoveCharacter moveCharacter; 
+    public MoveCharacter moveCharacter;
+    public FaceUIController faceUIController;
 
 
     public Vector2 mapSize;//マップの大きさ
@@ -20,13 +22,16 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
 	public CharacterSelection characterSelection;
 	[SerializeField]
 	GameObject characterSelectionUI;
+    [SerializeField]
+    GameObject UI;
 
+    
     public List<GameObject> charaList;
     public GameObject nowTurnCharacter;
     public GameObject map; //mapオブジェクトこの下にmapchip生成
     public GameObject[,] mapChips; //mapのオブジェクトが入ってる
     public int[,] moveMap;
-
+    
     public bool isTurn = false;
 
     // Use this for initialization
@@ -38,9 +43,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
 		List<long> enemyIndex = new List<long>{1023010301L,1023010301L};
 		CharacterArrengement(enemyIndex,false);
 		//自軍キャラ選択&配置
-		GameObject temp = GameObject.Find("UI");
-		GameObject characterSelectionUITemp = Instantiate(characterSelectionUI, temp.transform.position,Quaternion.identity);
-		characterSelectionUITemp.transform.parent = temp.transform;
+		GameObject characterSelectionUITemp = Instantiate(characterSelectionUI, UI.transform.position,Quaternion.identity);
+		characterSelectionUITemp.transform.parent = UI.transform;
 		characterSelection = new CharacterSelection (characterSelectionUITemp);
 		StartCoroutine (characterSelection.SelectCharacter());
     }
@@ -51,10 +55,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     {
         if (!isTurn)
         {
-            if (i == charaList.Count) i = 0;
-            //turnManager.StartTurn(charaList[i]);
-            StartTurn(charaList[i]);
-            i++;
+            StartTurn(charaList[0]);
             isTurn = true;
         }
     }
@@ -98,24 +99,23 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
 		//charaPrefはPrefabs/ito/CharaPrefを指定しておいてください
 		GameObject temp = Instantiate(charaPref, mapChip.transform.position, Quaternion.identity);
         temp.transform.parent = mapChip.transform;
-		temp.GetComponent<CharacterInfo> ().Initialize (index);
-        temp.GetComponent<CharacterInfo>().setPlayable(isPlayable);
+		temp.GetComponent<CharacterInfo> ().Initialize (index, isPlayable);
+        faceUIController.InitializeFaceUI(index, temp);
         charaList.Add(temp);
     }
+
 
     public int[,] GetMoveMap(bool charaPlayable)
     {
         int[,] temp = (int[,])moveMap.Clone();
         foreach (GameObject obj in charaList)
         {
-            if (charaPlayable != obj.GetComponent<CharacterInfo>().getPlayable())
-            {
-                temp[(int)obj.transform.parent.position.x, (int)obj.transform.parent.position.y] = -99;
-            }
+            temp[(int)obj.transform.parent.position.x, (int)obj.transform.parent.position.y] = -99;
         }
         return temp;
     }
 
+    
 
     public void ClickEvent(GameObject obj)
     {
@@ -133,13 +133,24 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     {
         nowTurnCharacter = character;
         moveCharacter.InitializeValue(nowTurnCharacter);
-        //coroutine = StartCoroutine(Turn());
     }
 
     public void EndTurn()
     {
-        //StopCoroutine(Turn());
+        sortCharaList();
+        faceUIController.UpdateUI();
         GameManager.Instance.emphasisSprite.DisenableEmphasiss();
         GameManager.Instance.isTurn = false;
+    }
+
+    void sortCharaList()
+    {
+        GameObject temp = charaList[0];
+        int i =0;
+        for (; i < charaList.Count - 1; i++)
+        {
+            charaList[i] = charaList[i + 1];
+        }
+        charaList[i] = temp;
     }
 }

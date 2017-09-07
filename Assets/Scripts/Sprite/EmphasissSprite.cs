@@ -10,7 +10,6 @@ public class EmphasissSprite : MonoBehaviour
     List<GameObject> emphasissObj;
     bool isTrigger = false;
 
-	//TODO:色を変えたいマン
 
     void Update()
     {
@@ -42,8 +41,7 @@ public class EmphasissSprite : MonoBehaviour
         isTrigger = true;
         emphasissObj = obj;
     }
-<<<<<<< HEAD
-=======
+
 		
 	//onecolor にする関数
 	public void OneColorEmphasiss(List<GameObject> oneEmphasissObj)
@@ -55,12 +53,11 @@ public class EmphasissSprite : MonoBehaviour
 			if(emphasissObj.Contains(obj))
 			{
 				emphasissObj.Remove (obj);
-				Debug.Log ("ある");
+				//Debug.Log ("ある");
 			}
 			obj.GetComponent<SpriteRenderer>().color = new Color(0.7f, 0.0f, 0.0f, 1);
 		}
 	}
->>>>>>> origin/yota
 
     public void DisenableEmphasiss()
     {

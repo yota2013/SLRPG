@@ -92,8 +92,8 @@ public class MoveCharacter : MonoBehaviour
         nowTurnCharacter = character;
         beforeParent = character.transform.parent.gameObject;
         
-		//CalculateMoveMap(character);//計算の移動 計算とマスを光らしている．　ボタンにしたい
-		//isMove = true;
+		CalculateMoveMap(character);//計算の移動 計算とマスを光らしている．　ボタンにしたい
+	    isMove = true;
     }
 		
 
